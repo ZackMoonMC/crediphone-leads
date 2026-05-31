@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crediphone Express - Préstamos al instante</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rojo: #E8192C;
+    --rojo-oscuro: #B5001F;
+    --negro: #0A0A0A;
+    --blanco: #FAFAFA;
+    --gris: #1A1A1A;
+    --gris-claro: #2A2A2A;
+    --texto-muted: #888;
+    --verde: #00C853;
+  }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--negro);
+    color: var(--blanco);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    padding: 0;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(232,25,44,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-left {
+    padding: 60px 50px 60px 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--rojo);
+    margin-bottom: 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo span { color: var(--blanco); }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(232,25,44,0.15);
+    border: 1px solid rgba(232,25,44,0.3);
+    color: #ff6b7a;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    width: fit-content;
+  }
+
+  .badge::before { content: '🔥'; }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 6vw, 82px);
+    line-height: 0.95;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+  }
+
+  h1 .highlight { color: var(--rojo); }
+
+  .subtitulo {
+    font-size: 16px;
+    color: var(--texto-muted);
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    max-width: 380px;
+  }
+
+  .checks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #ccc;
+  }
+
+  .check-icon {
+    width: 22px; height: 22px;
+    background: rgba(0,200,83,0.15);
+    border: 1px solid rgba(0,200,83,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  /* FORM SIDE */
+  .hero-right {
+    background: var(--gris);
+    border-left: 1px solid rgba(255,255,255,0.05);
+    padding: 60px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+  }
+
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--rojo), var(--rojo-oscuro));
+  }
+
+  .form-titulo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 32px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .form-sub {
+    font-size: 13px;
+    color: var(--texto-muted);
+    margin-bottom: 32px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--texto-muted);
+    margin-bottom: 8px;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 13px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--blanco);
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    transition: border-color 0.2s, background 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  input::placeholder { color: rgba(255,255,255,0.2); }
+
+  select option { background: #1a1a1a; color: #fff; }
+
+  input:focus, select:focus {
+    border-color: var(--rojo);
+    background: rgba(232,25,44,0.05);
+  }
+
+  input.error, select.error { border-color: #ff4444; }
+
+  .error-msg {
+    font-size: 11px;
+    color: #ff6b6b;
+    margin-top: 4px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .btn-submit {
+    width: 100%;
+    padding: 16px;
+    background: var(--rojo);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-submit:hover { background: var(--rojo-oscuro); }
+  .btn-submit:active { transform: scale(0.99); }
+  .btn-submit:disabled { background: #444; cursor: not-allowed; }
+
+  .disclaimer {
+    font-size: 11px;
+    color: var(--texto-muted);
+    text-align: center;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+
+  /* SUCCESS */
+  .success-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .success-overlay.show { display: flex; }
+
+  .success-card {
+    background: var(--gris);
+    border: 1px solid rgba(0,200,83,0.3);
+    border-radius: 16px;
+    padding: 48px 40px;
+    max-width: 420px;
+    text-align: center;
+    animation: popIn 0.3s ease;
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-icon {
+    width: 70px; height: 70px;
+    background: rgba(0,200,83,0.15);
+    border: 2px solid rgba(0,200,83,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 24px;
+  }
+
+  .success-card h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+
+  .success-card p {
+    font-size: 14px;
+    color: var(--texto-muted);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .btn-volver {
+    padding: 12px 28px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--blanco);
+    border-radius: 8px;
+    font-family: 'Outfit', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .btn-volver:hover { background: rgba(255,255,255,0.05); }
+
+  /* LOADER */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 40px 24px 30px; }
+    .hero-right { padding: 30px 24px 50px; }
+    .logo { margin-bottom: 30px; }
+    .grid-2 { grid-template-columns: 1fr; }
+    h1 { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="logo">CREDI<span>PHONE</span> EXPRESS</div>
+    <div class="badge">Aprobación en minutos</div>
+    <h1>TU PRÉSTAMO<br><span class="highlight">HOY MISMO</span></h1>
+    <p class="subtitulo">Financiamiento rápido y seguro para asalariados, funcionarios y jubilados en Paraguay. Sin trámites complicados.</p>
+    <div class="checks">
+      <div class="check-item"><div class="check-icon">✓</div> Retirás el mismo día</div>
+      <div class="check-item"><div class="check-icon">✓</div> Respuesta inmediata</div>
+      <div class="check-item"><div class="check-icon">✓</div> Sin garante</div>
+      <div class="check-item"><div class="check-icon">✓</div> 100% confidencial</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="form-titulo">SOLICITAR AHORA 🚀</div>
+    <p class="form-sub">Completá estos datos y te contactamos en minutos</p>
+
+    <form id="lead-form" onsubmit="enviarFormulario(event)">
+      <div class="grid-2">
+        <div class="form-group">
+          <label>📝 Número de cédula</label>
+          <input type="text" id="cedula" placeholder="Ej: 4.123.456" maxlength="15" />
+          <p class="error-msg" id="err-cedula">Ingresá tu cédula.</p>
+        </div>
+        <div class="form-group">
+          <label>📅 Fecha de nacimiento</label>
+          <input type="date" id="fechaNacimiento" />
+          <p class="error-msg" id="err-fecha">Ingresá tu fecha de nacimiento.</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>📱 Número de teléfono</label>
+        <input type="tel" id="telefono" placeholder="Ej: 0992 401 579" maxlength="15" />
+        <p class="error-msg" id="err-telefono">Ingresá tu teléfono.</p>
+      </div>
+
+      <div class="form-group">
+        <label>💼 ¿En qué trabajás?</label>
+        <select id="trabajo">
+          <option value="">— Seleccioná tu situación —</option>
+          <option value="Asalariado con IPS">Asalariado con IPS</option>
+          <option value="Funcionario público">Funcionario público</option>
+          <option value="Funcionario bancario">Funcionario bancario</option>
+          <option value="Jubilado">Jubilado</option>
+        </select>
+        <p class="error-msg" id="err-trabajo">Seleccioná tu situación laboral.</p>
+      </div>
+
+      <div class="form-group">
+        <label>⏱ ¿Cuánto tiempo trabajás ahí?</label>
+        <select id="antiguedad">
+          <option value="">— Seleccioná la antigüedad —</option>
+          <option value="Menos de 6 meses">Menos de 6 meses</option>
+          <option value="6 meses a 1 año">6 meses a 1 año</option>
+          <option value="Más de 1 año">Más de 1 año</option>
+        </select>
+        <p class="error-msg" id="err-antiguedad">Seleccioná tu antigüedad.</p>
+      </div>
+
+      <div class="form-group">
+        <label>💰 ¿Cuál es tu salario mensual?</label>
+        <select id="salario">
+          <option value="">— Seleccioná tu rango —</option>
+          <option value="Menos de Gs. 2.500.000">Menos de Gs. 2.500.000</option>
+          <option value="Gs. 2.500.000 a Gs. 3.500.000">Gs. 2.500.000 a Gs. 3.500.000</option>
+          <option value="Gs. 3.500.000 a Gs. 5.000.000">Gs. 3.500.000 a Gs. 5.000.000</option>
+          <option value="Más de Gs. 5.000.000">Más de Gs. 5.000.000</option>
+        </select>
+        <p class="error-msg" id="err-salario">Seleccioná tu rango salarial.</p>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btn-submit">
+        <div class="spinner" id="spinner"></div>
+        <span id="btn-texto">SOLICITAR AHORA 🚀</span>
+      </button>
+      <p class="disclaimer">Aprobación sujeta a análisis crediticio. Tus datos son confidenciales y seguros.</p>
+    </form>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-card">
+    <div class="success-icon">✅</div>
+    <h2>¡SOLICITUD ENVIADA!</h2>
+    <p>Recibimos tus datos. Un asesor de Crediphone Express te contactará al <strong id="tel-confirmacion"></strong> en los próximos minutos.</p>
+    <button class="btn-volver" onclick="cerrarSuccess()">Volver al inicio</button>
+  </div>
+</div>
+
+<script>
+  const BACKEND_URL = window.location.origin;
+
+  function validar() {
+    let ok = true;
+    const campos = [
+      { id: 'cedula', err: 'err-cedula', check: v => v.trim().length >= 5 },
+      { id: 'fechaNacimiento', err: 'err-fecha', check: v => v !== '' },
+      { id: 'telefono', err: 'err-telefono', check: v => v.trim().length >= 7 },
+      { id: 'trabajo', err: 'err-trabajo', check: v => v !== '' },
+      { id: 'antiguedad', err: 'err-antiguedad', check: v => v !== '' },
+      { id: 'salario', err: 'err-salario', check: v => v !== '' },
+    ];
+
+    campos.forEach(c => {
+      const el = document.getElementById(c.id);
+      const err = document.getElementById(c.err);
+      if (!c.check(el.value)) {
+        el.classList.add('error');
+        err.classList.add('show');
+        ok = false;
+      } else {
+        el.classList.remove('error');
+        err.classList.remove('show');
+      }
+    });
+    return ok;
+  }
+
+  async function enviarFormulario(e) {
+    e.preventDefault();
+    if (!validar()) return;
+
+    const btn = document.getElementById('btn-submit');
+    const spinner = document.getElementById('spinner');
+    const btnTexto = document.getElementById('btn-texto');
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnTexto.textContent = 'PROCESANDO...';
+
+    const datos = {
+      cedula: document.getElementById('cedula').value,
+      fechaNacimiento: document.getElementById('fechaNacimiento').value,
+      telefono: document.getElementById('telefono').value,
+      trabajo: document.getElementById('trabajo').value,
+      antiguedad: document.getElementById('antiguedad').value,
+      salario: document.getElementById('salario').value,
+    };
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/lead`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        document.getElementById('tel-confirmacion').textContent = datos.telefono;
+        document.getElementById('success-overlay').classList.add('show');
+        document.getElementById('lead-form').reset();
+      } else {
+        alert('Hubo un error al enviar tu solicitud. Intentá de nuevo.');
+      }
+    } catch (err) {
+      alert('No se pudo conectar. Verificá tu conexión e intentá de nuevo.');
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnTexto.textContent = 'SOLICITAR AHORA 🚀';
+    }
+  }
+
+  function cerrarSuccess() {
+    document.getElementById('success-overlay').classList.remove('show');
+  }
+</script>
+</body>
+</html>
