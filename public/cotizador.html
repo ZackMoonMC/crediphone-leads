@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Crediphone · Trade-in iPhones</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f0;
+  --surface:#ffffff;
+  --text:#111;
+  --muted:#888;
+  --border:#e0ddd6;
+  --accent:#111;
+  --radius:14px;
+  --radius-sm:10px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 0 60px}
+.header{width:100%;max-width:480px;background:#111;color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:10}
+.header-name{font-size:17px;font-weight:600;letter-spacing:-.01em}
+.header-sub{font-size:11px;color:#aaa;margin-top:2px}
+.header-tc{text-align:right}
+.header-tc-label{font-size:10px;color:#888}
+.header-tc-val{font-size:12px;font-weight:500;color:#eee;font-family:'DM Mono',monospace}
+.container{width:100%;max-width:480px;padding:20px 16px}
+.steps{display:flex;align-items:center;justify-content:center;margin-bottom:28px}
+.step{display:flex;flex-direction:column;align-items:center;gap:5px}
+.step-dot{width:32px;height:32px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;color:var(--muted);transition:all .25s}
+.step-dot.done{background:#111;border-color:#111;color:#fff}
+.step-dot.active{background:#111;border-color:#111;color:#fff;box-shadow:0 0 0 4px rgba(0,0,0,.1)}
+.step-lbl{font-size:10px;color:var(--muted);white-space:nowrap}
+.step-lbl.active{color:var(--text);font-weight:600}
+.step-line{width:28px;height:1.5px;background:var(--border);margin-bottom:19px;transition:background .25s}
+.step-line.done{background:#111}
+h2{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.subtitle{font-size:13px;color:var(--muted);margin-bottom:20px}
+.section-lbl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.model-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.model-btn{padding:13px 8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;background:var(--surface);color:var(--text);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3}
+.model-btn:active{transform:scale(.97)}
+.model-btn.selected{background:#111;color:#fff;border-color:#111}
+.cap-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.cap-btn{padding:10px 20px;border:1.5px solid var(--border);border-radius:40px;font-size:15px;font-family:'DM Sans',sans-serif;font-weight:500;background:var(--surface);color:var(--text);cursor:pointer;transition:all .15s}
+.cap-btn.selected{background:#111;color:#fff;border-color:#111}
+.page{display:none}
+.page.active{display:block}
+
+/* SERIE BUTTONS */
+.series-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.serie-btn{padding:10px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:'DM Sans',sans-serif;font-size:15px;font-weight:600;color:var(--text);cursor:pointer;transition:all .15s}
+.serie-btn.selected{background:#111;color:#fff;border-color:#111}
+
+/* VARIANTE GRID */
+.var-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:6px}
+.var-btn{padding:13px 8px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'DM Sans',sans-serif;font-weight:500;background:var(--surface);color:var(--text);cursor:pointer;text-align:center;transition:all .15s;line-height:1.3}
+.var-btn.selected{background:#111;color:#fff;border-color:#111}
+
+.sub-section{display:none}
+.sub-section.visible{display:block}
+.divider{height:1px;background:var(--border);margin:16px 0}
+
+/* PASO 2 */
+.fallas-title{font-size:22px;font-weight:600;letter-spacing:-.02em;margin-bottom:4px}
+.fallas-sub{font-size:13px;color:var(--muted);margin-bottom:20px}
+.check-list{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.check-item{padding:16px 18px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface);cursor:pointer;display:flex;align-items:center;gap:14px;transition:all .15s}
+.check-item:active{transform:scale(.98)}
+.check-item.selected{border-color:#111;background:#f8f8f6}
+.check-box{width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.check-item.selected .check-box{background:#111;border-color:#111}
+.check-label{font-size:15px;font-weight:500;color:var(--text);line-height:1.3}
+.no-falla{font-size:13px;color:var(--muted);padding:14px;text-align:center;border:1.5px dashed var(--border);border-radius:var(--radius);margin-bottom:20px}
+
+/* NAV */
+.nav{display:flex;gap:10px}
+.btn-back{flex:1;padding:14px;border:1.5px solid var(--border);border-radius:var(--radius);background:var(--surface);color:var(--text);font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.btn-back:active{transform:scale(.97)}
+.btn-next{flex:2;padding:14px;border:none;border-radius:var(--radius);background:#111;color:#fff;font-size:15px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.btn-next:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+.btn-next:not(:disabled):active{transform:scale(.97)}
+
+/* RESULTADO */
+.result-hero{background:#111;color:#fff;border-radius:var(--radius);padding:26px 20px;text-align:center;margin-bottom:12px}
+.result-hero-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#888;margin-bottom:10px}
+.result-hero-amt{font-size:46px;font-weight:600;letter-spacing:-.03em;font-family:'DM Mono',monospace;line-height:1}
+.result-hero-model{font-size:14px;color:#aaa;margin-top:8px}
+.detail-box{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.detail-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.detail-row:last-child{border-bottom:none}
+.detail-lbl{font-size:13px;color:var(--muted)}
+.detail-val{font-size:13px;font-weight:500;font-family:'DM Mono',monospace}
+.fallas-box{background:#fffbf0;border:1.5px solid #f0e0b0;border-radius:var(--radius);padding:14px 16px;margin-bottom:12px}
+.fallas-box-title{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#b08020;margin-bottom:8px}
+.falla-tag{display:inline-block;background:#fff;border:1px solid #e8d090;border-radius:20px;padding:4px 12px;font-size:12px;color:#8a6010;margin:3px 4px 3px 0}
+.btn-wsp{width:100%;padding:16px;background:#22c55e;color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:10px;transition:all .15s;box-shadow:0 4px 16px rgba(34,197,94,.3)}
+.btn-wsp:active{transform:scale(.97);background:#16a34a}
+.btn-reset{width:100%;padding:13px;background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:var(--radius);font-size:14px;font-weight:500;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.btn-reset:active{transform:scale(.97)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-name">Crediphone</div>
+    <div class="header-sub">Trade-in iPhones</div>
+  </div>
+  <div class="header-tc">
+    <div class="header-tc-label">Cambios Chaco</div>
+    <div class="header-tc-val">V: 6.380 · C: 6.280</div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="steps">
+    <div class="step"><div class="step-dot active" id="s1">1</div><div class="step-lbl active" id="sl1">Modelo</div></div>
+    <div class="step-line" id="l1"></div>
+    <div class="step"><div class="step-dot" id="s2">2</div><div class="step-lbl" id="sl2">Estado</div></div>
+    <div class="step-line" id="l2"></div>
+    <div class="step"><div class="step-dot" id="s3">3</div><div class="step-lbl" id="sl3">Resultado</div></div>
+  </div>
+
+  <!-- PASO 1 -->
+  <div class="page active" id="p1">
+    <h2>¿Qué iPhone tenés?</h2>
+    <p class="subtitle">Seleccioná tu modelo paso a paso</p>
+
+    <div class="section-lbl">Serie</div>
+    <div class="series-row" id="series-row"></div>
+
+    <div class="sub-section" id="sec-variante">
+      <div class="divider"></div>
+      <div class="section-lbl">Variante</div>
+      <div class="var-grid" id="var-grid"></div>
+    </div>
+
+    <div class="sub-section" id="sec-cap">
+      <div class="divider"></div>
+      <div class="section-lbl">Capacidad</div>
+      <div class="cap-row" id="cap-row"></div>
+    </div>
+
+    <div class="nav" style="margin-top:8px">
+      <button class="btn-next" id="btn1" disabled onclick="goTo(2)">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="page" id="p2">
+    <h2>¿Tu equipo tiene alguna falla?</h2>
+    <p class="subtitle">Marcá todo lo que aplica a tu iPhone</p>
+    <div class="check-list" id="parts-list"></div>
+    <div class="no-falla" id="no-falla" style="display:none">Sin fallas registradas</div>
+    <div class="nav">
+      <button class="btn-back" onclick="goTo(1)">← Atrás</button>
+      <button class="btn-next" onclick="goTo(3)">Ver mi valuación →</button>
+    </div>
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="page" id="p3">
+    <h2>Tu valuación</h2>
+    <p class="subtitle" id="res-sub"></p>
+    <div class="result-hero">
+      <div class="result-hero-label">Valor como parte de pago</div>
+      <div class="result-hero-amt" id="res-amt">Gs. 0</div>
+      <div class="result-hero-model" id="res-model"></div>
+    </div>
+    <div class="detail-box">
+      <div class="detail-row"><span class="detail-lbl">Valor base</span><span class="detail-val" id="d-base">—</span></div>
+      <div class="detail-row" id="d-piezas-row"><span class="detail-lbl">Descuentos aplicados</span><span class="detail-val" id="d-piezas" style="color:#c0392b">—</span></div>
+      <div class="detail-row"><span class="detail-lbl">Valor final</span><span class="detail-val" id="d-total" style="font-weight:700">—</span></div>
+    </div>
+    <div class="fallas-box" id="fallas-box" style="display:none">
+      <div class="fallas-box-title">⚠️ Fallas declaradas</div>
+      <div id="fallas-tags"></div>
+    </div>
+    <button class="btn-wsp" onclick="compartirWsp()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Enviar evaluación a Crediphone →
+    </button>
+    <button class="btn-reset" onclick="resetAll()">Nueva cotización</button>
+  </div>
+</div>
+
+<script>
+const PRICES={
+  "X":{"64":{"base":400000,"display":100000,"bateria":100000,"tapa":100000,"camara":200000,"faceid":200000,"mancha":100000},"256":{"base":400000,"display":100000,"bateria":100000,"tapa":100000,"camara":200000,"faceid":200000,"mancha":100000}},
+  "XR":{"64":{"base":400000,"display":100000,"bateria":100000,"tapa":100000,"camara":200000,"faceid":200000,"mancha":100000},"128":{"base":400000,"display":100000,"bateria":100000,"tapa":100000,"camara":200000,"faceid":200000,"mancha":100000}},
+  "XS":{"64":{"base":400000,"display":100000,"bateria":100000,"tapa":200000,"camara":200000,"faceid":200000,"mancha":100000},"256":{"base":400000,"display":100000,"bateria":100000,"tapa":200000,"camara":200000,"faceid":200000,"mancha":100000}},
+  "XS Max":{"64":{"base":500000,"display":200000,"bateria":100000,"tapa":100000,"camara":300000,"faceid":300000,"mancha":100000},"256":{"base":500000,"display":200000,"bateria":100000,"tapa":100000,"camara":300000,"faceid":300000,"mancha":100000}},
+  "11":{"64":{"base":600000,"display":200000,"bateria":200000,"tapa":200000,"camara":300000,"faceid":300000,"mancha":100000},"128":{"base":700000,"display":200000,"bateria":200000,"tapa":200000,"camara":300000,"faceid":300000,"mancha":100000}},
+  "11 Pro":{"64":{"base":700000,"display":200000,"bateria":200000,"tapa":200000,"camara":400000,"faceid":300000,"mancha":100000},"256":{"base":800000,"display":200000,"bateria":200000,"tapa":200000,"camara":400000,"faceid":300000,"mancha":100000}},
+  "11 Pro Max":{"64":{"base":800000,"display":300000,"bateria":300000,"tapa":300000,"camara":400000,"faceid":400000,"mancha":100000},"256":{"base":900000,"display":300000,"bateria":300000,"tapa":300000,"camara":400000,"faceid":400000,"mancha":100000}},
+  "12":{"64":{"base":700000,"display":300000,"bateria":200000,"tapa":200000,"camara":400000,"faceid":400000,"mancha":200000},"128":{"base":800000,"display":300000,"bateria":200000,"tapa":200000,"camara":400000,"faceid":400000,"mancha":200000}},
+  "12 Pro":{"128":{"base":1100000,"display":300000,"bateria":200000,"tapa":200000,"camara":400000,"faceid":400000,"mancha":200000},"256":{"base":1300000,"display":300000,"bateria":200000,"tapa":300000,"camara":400000,"faceid":400000,"mancha":200000}},
+  "12 Pro Max":{"128":{"base":1400000,"display":400000,"bateria":300000,"tapa":400000,"camara":600000,"faceid":500000,"mancha":200000},"256":{"base":1500000,"display":400000,"bateria":300000,"tapa":400000,"camara":600000,"faceid":500000,"mancha":200000}},
+  "13":{"128":{"base":1200000,"display":400000,"bateria":300000,"tapa":300000,"camara":500000,"faceid":400000,"mancha":200000},"256":{"base":1400000,"display":400000,"bateria":300000,"tapa":300000,"camara":500000,"faceid":400000,"mancha":200000}},
+  "13 Pro":{"128":{"base":1700000,"display":450000,"bateria":400000,"tapa":400000,"camara":700000,"faceid":500000,"mancha":300000},"256":{"base":2100000,"display":450000,"bateria":400000,"tapa":400000,"camara":700000,"faceid":500000,"mancha":300000}},
+  "13 Pro Max":{"128":{"base":2100000,"display":500000,"bateria":400000,"tapa":400000,"camara":800000,"faceid":500000,"mancha":300000},"256":{"base":2400000,"display":500000,"bateria":400000,"tapa":400000,"camara":800000,"faceid":500000,"mancha":300000}},
+  "14":{"128":{"base":1300000,"display":400000,"bateria":300000,"tapa":400000,"camara":750000,"faceid":500000,"mancha":200000},"256":{"base":1500000,"display":400000,"bateria":300000,"tapa":400000,"camara":750000,"faceid":500000,"mancha":200000}},
+  "14 Plus":{"128":{"base":1600000,"display":800000,"bateria":500000,"tapa":600000,"camara":1000000,"faceid":700000,"mancha":200000},"256":{"base":2000000,"display":800000,"bateria":500000,"tapa":600000,"camara":1000000,"faceid":700000,"mancha":200000}},
+  "14 Pro":{"128":{"base":2200000,"display":700000,"bateria":500000,"tapa":600000,"camara":800000,"faceid":700000,"mancha":300000},"256":{"base":2500000,"display":700000,"bateria":500000,"tapa":600000,"camara":800000,"faceid":700000,"mancha":300000}},
+  "14 Pro Max":{"128":{"base":2500000,"display":800000,"bateria":600000,"tapa":600000,"camara":800000,"faceid":700000,"mancha":300000},"256":{"base":2800000,"display":800000,"bateria":600000,"tapa":600000,"camara":800000,"faceid":700000,"mancha":300000}},
+  "15":{"128":{"base":2000000,"display":800000,"bateria":600000,"tapa":700000,"camara":1000000,"faceid":800000,"mancha":300000},"256":{"base":2300000,"display":800000,"bateria":600000,"tapa":700000,"camara":1000000,"faceid":800000,"mancha":300000}},
+  "15 Plus":{"128":{"base":2400000,"display":1300000,"bateria":800000,"tapa":800000,"camara":1500000,"faceid":1300000,"mancha":300000},"256":{"base":2700000,"display":1300000,"bateria":800000,"tapa":800000,"camara":1500000,"faceid":1300000,"mancha":300000}},
+  "15 Pro":{"128":{"base":3000000,"display":1300000,"bateria":600000,"tapa":700000,"camara":1200000,"faceid":1300000,"mancha":400000},"256":{"base":3300000,"display":1300000,"bateria":600000,"tapa":700000,"camara":1200000,"faceid":1300000,"mancha":400000},"512":{"base":3400000,"display":1300000,"bateria":600000,"tapa":700000,"camara":1200000,"faceid":1300000,"mancha":400000}},
+  "15 Pro Max":{"256":{"base":3600000,"display":1400000,"bateria":700000,"tapa":800000,"camara":1400000,"faceid":1300000,"mancha":400000},"512":{"base":4300000,"display":1400000,"bateria":700000,"tapa":800000,"camara":1400000,"faceid":1300000,"mancha":400000}},
+  "16":{"128":{"base":3000000,"display":1500000,"bateria":600000,"tapa":800000,"camara":1500000,"faceid":1500000,"mancha":400000},"256":{"base":3500000,"display":1500000,"bateria":600000,"tapa":800000,"camara":1500000,"faceid":1500000,"mancha":400000}},
+  "16 Plus":{"128":{"base":3400000,"display":1800000,"bateria":800000,"tapa":1000000,"camara":2000000,"faceid":1600000,"mancha":400000},"256":{"base":3600000,"display":1800000,"bateria":800000,"tapa":1000000,"camara":2000000,"faceid":1600000,"mancha":400000}},
+  "16 Pro":{"128":{"base":4000000,"display":1600000,"bateria":800000,"tapa":800000,"camara":2000000,"faceid":1800000,"mancha":400000},"256":{"base":4500000,"display":1600000,"bateria":800000,"tapa":800000,"camara":2000000,"faceid":1800000,"mancha":400000}},
+  "16 Pro Max":{"256":{"base":4800000,"display":1800000,"bateria":1000000,"tapa":1000000,"camara":1600000,"faceid":1800000,"mancha":400000},"512":{"base":5300000,"display":1800000,"bateria":1000000,"tapa":1000000,"camara":1600000,"faceid":1800000,"mancha":400000}}
+};
+
+const PARTS=[
+  {key:"display", label:"⚠️ Pantalla rota o fisurada"},
+  {key:"bateria", label:"⚠️ Batería desgastada (menos de 80%)"},
+  {key:"tapa",    label:"⚠️ Tapa rota o fisurada"},
+  {key:"camara",  label:"⚠️ Cámara dañada"},
+  {key:"faceid",  label:"⚠️ Face ID no funciona"},
+  {key:"mancha",  label:"⚠️ Mancha en cámara"}
+];
+
+const MAX_NUM = "595994872151";
+let selModel=null, selCap=null, selParts=new Set(), selSerie=null, selVariant=null;
+const fmt = n => "Gs. " + Math.round(n).toLocaleString('es-PY');
+
+const CATALOG = {
+  "11":[
+    {label:"iPhone 11 normal",   caps:["64","128"]},
+    {label:"iPhone 11 Pro",      caps:["64","256"]},
+    {label:"iPhone 11 Pro Max",  caps:["64","256"]},
+  ],
+  "12":[
+    {label:"iPhone 12 normal",   caps:["64","128"]},
+    {label:"iPhone 12 Pro",      caps:["128","256"]},
+    {label:"iPhone 12 Pro Max",  caps:["128","256"]},
+  ],
+  "13":[
+    {label:"iPhone 13 normal",   caps:["128","256"]},
+    {label:"iPhone 13 Pro",      caps:["128","256","512"]},
+    {label:"iPhone 13 Pro Max",  caps:["128","256"]},
+  ],
+  "14":[
+    {label:"iPhone 14 normal",   caps:["128","256"]},
+    {label:"iPhone 14 Plus",     caps:["128","256"]},
+    {label:"iPhone 14 Pro",      caps:["128","256"]},
+    {label:"iPhone 14 Pro Max",  caps:["128","256"]},
+  ],
+  "15":[
+    {label:"iPhone 15 normal",   caps:["128","256"]},
+    {label:"iPhone 15 Plus",     caps:["128","256"]},
+    {label:"iPhone 15 Pro",      caps:["128","256","512"]},
+    {label:"iPhone 15 Pro Max",  caps:["256","512"]},
+  ],
+  "16":[
+    {label:"iPhone 16 normal",   caps:["128","256"]},
+    {label:"iPhone 16 Plus",     caps:["128","256"]},
+    {label:"iPhone 16 Pro",      caps:["128","256"]},
+    {label:"iPhone 16 Pro Max",  caps:["256","512"]},
+  ],
+};
+
+function buildSeries(){
+  const row = document.getElementById('series-row');
+  row.innerHTML = '';
+  Object.keys(CATALOG).forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'serie-btn';
+    b.textContent = s;
+    b.onclick = () => {
+      selSerie = s; selModel = null; selCap = null; selVariant = null;
+      document.querySelectorAll('.serie-btn').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      buildVariants(s);
+      document.getElementById('sec-cap').classList.remove('visible');
+      document.getElementById('btn1').disabled = true;
+      setTimeout(() => document.getElementById('sec-variante').scrollIntoView({behavior:'smooth',block:'start'}), 80);
+    };
+    row.appendChild(b);
+  });
+}
+
+function buildVariants(serie){
+  const grid = document.getElementById('var-grid');
+  grid.innerHTML = '';
+  document.getElementById('sec-variante').classList.add('visible');
+  CATALOG[serie].forEach(v => {
+    const b = document.createElement('button');
+    b.className = 'var-btn';
+    b.textContent = v.label;
+    b.onclick = () => {
+      selVariant = v; selModel = v.label; selCap = null;
+      document.querySelectorAll('.var-btn').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      buildCapsNew(v);
+      document.getElementById('btn1').disabled = true;
+      setTimeout(() => document.getElementById('sec-cap').scrollIntoView({behavior:'smooth',block:'start'}), 80);
+    };
+    grid.appendChild(b);
+  });
+}
+
+function buildCapsNew(variant){
+  const row = document.getElementById('cap-row');
+  row.innerHTML = '';
+  document.getElementById('sec-cap').classList.add('visible');
+  variant.caps.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'cap-btn';
+    b.textContent = c + 'GB';
+    b.onclick = () => {
+      selCap = c;
+      document.querySelectorAll('.cap-btn').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      document.getElementById('btn1').disabled = false;
+      setTimeout(() => document.getElementById('btn1').scrollIntoView({behavior:'smooth',block:'nearest'}), 80);
+    };
+    row.appendChild(b);
+  });
+}
+
+function getPriceKey(label){
+  // label is like "iPhone 13 Pro Max", PRICES key is "13 Pro Max"
+  return label ? label.replace('iPhone ','') : null;
+}
+
+function buildParts(){
+  const list = document.getElementById('parts-list');
+  list.innerHTML = ''; selParts.clear();
+  if(!selModel || !selCap) return;
+  const key = getPriceKey(selModel);
+  const p = PRICES[key] && PRICES[key][selCap];
+  if(!p) return;
+  let count = 0;
+  PARTS.forEach(({key:k, label}) => {
+    if(!p[k]) return;
+    count++;
+    const d = document.createElement('div');
+    d.className = 'check-item';
+    d.innerHTML = `<div class="check-box"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="check-label">${label}</span>`;
+    d.onclick = () => {
+      selParts.has(k) ? selParts.delete(k) : selParts.add(k);
+      d.classList.toggle('selected', selParts.has(k));
+    };
+    list.appendChild(d);
+  });
+  document.getElementById('no-falla').style.display = count === 0 ? 'block' : 'none';
+}
+
+function calcResult(){
+  const key = getPriceKey(selModel);
+  const p = PRICES[key][selCap];
+  let total = p.base, desc = 0;
+  selParts.forEach(k => { if(p[k]){ total -= p[k]; desc += p[k]; } });
+  if(total < 0) total = 0;
+
+  document.getElementById('res-sub').textContent = selModel + ' · ' + selCap + 'GB';
+  document.getElementById('res-amt').textContent = fmt(total);
+  document.getElementById('res-model').textContent = selModel + ' · ' + selCap + 'GB';
+  document.getElementById('d-base').textContent = fmt(p.base);
+
+  if(desc > 0){
+    document.getElementById('d-piezas').textContent = '− ' + fmt(desc);
+    document.getElementById('d-piezas-row').style.display = 'flex';
+  } else {
+    document.getElementById('d-piezas-row').style.display = 'none';
+  }
+  document.getElementById('d-total').textContent = fmt(total);
+
+  // Fallas tags
+  const tagsBox = document.getElementById('fallas-box');
+  const tagsDiv = document.getElementById('fallas-tags');
+  tagsDiv.innerHTML = '';
+  if(selParts.size > 0){
+    tagsBox.style.display = 'block';
+    selParts.forEach(k => {
+      const part = PARTS.find(x => x.key === k);
+      if(part){
+        const tag = document.createElement('span');
+        tag.className = 'falla-tag';
+        tag.textContent = part.label;
+        tagsDiv.appendChild(tag);
+      }
+    });
+  } else {
+    tagsBox.style.display = 'none';
+  }
+}
+
+function compartirWsp(){
+  const key = getPriceKey(selModel);
+  const p = PRICES[key][selCap];
+  let total = p.base;
+  selParts.forEach(k => { if(p[k]) total -= p[k]; });
+  if(total < 0) total = 0;
+
+  let fallas = '';
+  if(selParts.size > 0){
+    const lista = [];
+    selParts.forEach(k => {
+      const part = PARTS.find(x => x.key === k);
+      if(part) lista.push(part.label.replace('⚠️ ',''));
+    });
+    fallas = '\n⚠️ *Fallas:* ' + lista.join(', ');
+  }
+
+  const modelo = selModel + ' ' + selCap + 'GB';
+  const msg = `Hola! Acabo de cotizar mi equipo desde Crediphone Trade-in 📱\n\n*Modelo:* ${modelo}${fallas}\n\n✅ *Valor part-pago: ${fmt(total)}*\n\n¿Cuánto sería la diferencia por el iPhone que me interesa?`;
+  window.open('https://wa.me/' + MAX_NUM + '?text=' + encodeURIComponent(msg), '_blank');
+}
+
+function updateSteps(n){
+  [1,2,3].forEach(i => {
+    const c = document.getElementById('s'+i);
+    const ln = document.getElementById('l'+i);
+    if(i < n){
+      c.innerHTML = '<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+      c.classList.add('done'); c.classList.remove('active');
+    } else if(i === n){
+      c.textContent = i; c.classList.add('active'); c.classList.remove('done');
+    } else {
+      c.textContent = i; c.classList.remove('done','active');
+    }
+    if(ln) ln.classList.toggle('done', i < n);
+  });
+  document.querySelectorAll('.step-lbl').forEach((l,i) => {
+    l.classList.toggle('active', i+1 === n);
+  });
+}
+
+function goTo(n){
+  if(n === 2) buildParts();
+  if(n === 3) calcResult();
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('p'+n).classList.add('active');
+  updateSteps(n);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function resetAll(){
+  selModel = null; selCap = null; selSerie = null; selVariant = null; selParts = new Set();
+  document.getElementById('sec-variante').classList.remove('visible');
+  document.getElementById('sec-cap').classList.remove('visible');
+  document.querySelectorAll('.serie-btn').forEach(x => x.classList.remove('selected'));
+  document.getElementById('btn1').disabled = true;
+  goTo(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+buildSeries();
+updateSteps(1);
+</script>
+</body>
+</html>
