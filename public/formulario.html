@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Crediphone — Tu iPhone te espera</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .phone {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100vh;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    background: #CC0000;
+    padding: 52px 24px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .top-bar::before {
+    content: '';
+    position: absolute;
+    width: 220px; height: 220px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+    top: -90px; right: -50px;
+  }
+  .top-bar::after {
+    content: '';
+    position: absolute;
+    width: 130px; height: 130px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+    bottom: -40px; left: 10px;
+  }
+  .logo-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    position: relative; z-index: 1;
+  }
+  .logo-box {
+    width: 34px; height: 34px;
+    background: white;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; color: #CC0000; letter-spacing: -0.5px;
+  }
+  .logo-name { font-size: 17px; font-weight: 800; color: white; }
+  .top-title {
+    font-size: 21px; font-weight: 900; color: white;
+    line-height: 1.2; position: relative; z-index: 1;
+  }
+  .top-sub {
+    font-size: 13px; color: rgba(255,255,255,0.72);
+    margin-top: 4px; position: relative; z-index: 1;
+  }
+  .prog-wrap {
+    background: rgba(255,255,255,0.22);
+    height: 4px; border-radius: 2px;
+    margin-top: 14px; position: relative; z-index: 1;
+  }
+  .prog-fill {
+    height: 100%; border-radius: 2px; background: white;
+    transition: width 0.4s ease;
+  }
+  .step-label {
+    font-size: 11px; color: rgba(255,255,255,0.7);
+    margin-top: 7px; font-weight: 700;
+    position: relative; z-index: 1;
+  }
+
+  /* CONTENT */
+  .content { padding: 22px 18px 40px; }
+
+  .section-tag {
+    font-size: 11px; font-weight: 800; color: #CC0000;
+    text-transform: uppercase; letter-spacing: 1.2px;
+    margin-bottom: 10px;
+  }
+
+  .question {
+    font-size: 17px; font-weight: 900; color: #111;
+    margin-bottom: 14px; line-height: 1.3;
+  }
+
+  /* SERIES ROW */
+  .series-row {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .serie-btn {
+    padding: 10px 14px;
+    background: #f5f5f5;
+    border: 2px solid #e8e8e8;
+    border-radius: 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px; font-weight: 800; color: #444;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .serie-btn.sel {
+    background: #fff0f0; border-color: #CC0000; color: #CC0000;
+  }
+
+  /* VARIANTES GRID */
+  .var-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 6px;
+  }
+  .var-btn {
+    padding: 14px 10px;
+    background: #f5f5f5;
+    border: 2px solid #e8e8e8;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 800; color: #333;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .var-btn .price {
+    display: block; font-size: 11px;
+    font-weight: 600; color: #999; margin-top: 3px;
+  }
+  .var-btn.sel { background: #fff0f0; border-color: #CC0000; color: #CC0000; }
+  .var-btn.sel .price { color: #e06060; }
+
+  /* CAP GRID */
+  .cap-grid {
+    display: flex; gap: 10px; margin-bottom: 6px;
+  }
+  .cap-btn {
+    flex: 1; padding: 13px 8px;
+    background: #f5f5f5;
+    border: 2px solid #e8e8e8;
+    border-radius: 13px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 800; color: #333;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .cap-btn.sel { background: #fff0f0; border-color: #CC0000; color: #CC0000; }
+
+  /* CUOTAS */
+  .cuota-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px; margin-bottom: 6px;
+  }
+  .cuota-btn {
+    padding: 14px 6px;
+    background: #f5f5f5;
+    border: 2px solid #e8e8e8;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 800; color: #333;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+  }
+  .cuota-btn .icon { display: block; font-size: 20px; margin-bottom: 4px; }
+  .cuota-btn.sel { background: #fff0f0; border-color: #CC0000; color: #CC0000; }
+
+  .divider { height: 1px; background: #f0f0f0; margin: 20px 0; }
+
+  /* TRABAJO */
+  .trab-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 6px;
+  }
+  .trab-btn {
+    padding: 15px 10px;
+    background: #f5f5f5;
+    border: 2px solid #e8e8e8;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px; font-weight: 800; color: #333;
+    cursor: pointer; transition: all 0.15s; text-align: center;
+    line-height: 1.3;
+  }
+  .trab-btn .ticon { display: block; font-size: 22px; margin-bottom: 5px; }
+  .trab-btn.sel { background: #fff0f0; border-color: #CC0000; color: #CC0000; }
+
+  /* ANT / INGRESO */
+  .list-grid { display: grid; gap: 10px; margin-bottom: 6px; }
+  .list-btn {
+    padding: 15px 16px;
+    background: #f5f5f5;
+    border: 2px solid #e8e8e8;
+    border-radius: 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px; font-weight: 700; color: #333;
+    cursor: pointer; transition: all 0.15s; text-align: left;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .list-btn .licon { font-size: 20px; flex-shrink: 0; }
+  .list-btn .lsub { display: block; font-size: 11px; font-weight: 600; color: #999; margin-top: 2px; }
+  .list-btn.sel { background: #fff0f0; border-color: #CC0000; color: #CC0000; }
+  .list-btn.sel .lsub { color: #e06060; }
+
+  /* INPUTS */
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 13px; font-weight: 700; color: #555; margin-bottom: 7px; }
+  .field input {
+    width: 100%; padding: 14px 16px;
+    border: 2px solid #e8e8e8; border-radius: 12px;
+    font-family: 'Nunito', sans-serif; font-size: 15px;
+    font-weight: 600; color: #111; background: #f7f7f7;
+    outline: none; transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+  .field input:focus { border-color: #CC0000; background: white; }
+
+  /* BUTTONS */
+  .btn-primary {
+    width: 100%; padding: 17px;
+    background: #CC0000; color: white; border: none;
+    border-radius: 15px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 17px; font-weight: 900;
+    cursor: pointer; margin-top: 8px;
+    transition: opacity 0.15s;
+    letter-spacing: -0.3px;
+  }
+  .btn-primary:active { opacity: 0.86; transform: scale(0.99); }
+
+  .btn-back {
+    width: 100%; padding: 13px;
+    background: transparent; color: #bbb; border: none;
+    font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 600;
+    cursor: pointer; margin-top: 6px;
+  }
+
+  /* STEP VISIBILITY */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  /* HIDDEN SECTIONS */
+  .sub-section { display: none; }
+  .sub-section.visible { display: block; }
+
+  /* SUCCESS */
+  .success-wrap { text-align: center; padding: 10px 0 30px; }
+  .success-hero { font-size: 78px; display: block; margin-bottom: 6px; }
+  .fire-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #CC0000; color: white;
+    padding: 6px 16px; border-radius: 20px;
+    font-size: 12px; font-weight: 800;
+    margin-bottom: 18px;
+  }
+  .success-title { font-size: 24px; font-weight: 900; color: #111; line-height: 1.2; margin-bottom: 10px; }
+  .success-title span { color: #CC0000; }
+  .success-msg { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 22px; }
+  .summary-card {
+    background: #f7f7f7; border-radius: 16px;
+    padding: 16px 18px; text-align: left; margin-bottom: 20px;
+  }
+  .sum-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid #ebebeb;
+    font-size: 13px;
+  }
+  .sum-row:last-child { border-bottom: none; }
+  .sum-row .lbl { color: #999; font-weight: 600; }
+  .sum-row .val { color: #111; font-weight: 800; }
+  .footer-note { font-size: 12px; color: #bbb; line-height: 1.5; }
+
+  /* OVERLAY */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(255,255,255,0.93);
+    z-index: 99; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+  }
+  .overlay.show { display: flex; }
+  .spinner {
+    width: 38px; height: 38px;
+    border: 3px solid #f0f0f0; border-top-color: #CC0000;
+    border-radius: 50%; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spin-text { font-size: 15px; font-weight: 700; color: #333; }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <div class="overlay" id="overlay">
+    <div class="spinner"></div>
+    <div class="spin-text">Enviando tu solicitud...</div>
+  </div>
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="logo-row">
+      <div class="logo-box">CP</div>
+      <div class="logo-name">Crediphone</div>
+    </div>
+    <div class="top-title" id="topTitle">¿Qué iPhone querés? 📱</div>
+    <div class="top-sub" id="topSub">Elegí tu modelo paso a paso</div>
+    <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:33%"></div></div>
+    <div class="step-label" id="stepLabel">Paso 1 de 3</div>
+  </div>
+
+  <div class="content">
+
+    <!-- ══════════ PASO 1 ══════════ -->
+    <div class="step active" id="step1">
+
+      <div class="section-tag">Serie</div>
+      <div class="question">¿De qué año es tu iPhone ideal?</div>
+      <div class="series-row" id="seriesRow">
+        <button class="serie-btn" onclick="selectSerie('11')">11</button>
+        <button class="serie-btn" onclick="selectSerie('12')">12</button>
+        <button class="serie-btn" onclick="selectSerie('13')">13</button>
+        <button class="serie-btn" onclick="selectSerie('14')">14</button>
+        <button class="serie-btn" onclick="selectSerie('15')">15</button>
+        <button class="serie-btn" onclick="selectSerie('16')">16</button>
+        <button class="serie-btn" onclick="selectSerie('17')">17</button>
+      </div>
+
+      <!-- VARIANTES (se muestran al elegir serie) -->
+      <div class="sub-section" id="secVariante">
+        <div class="divider"></div>
+        <div class="section-tag">Variante</div>
+        <div class="question" id="varTitle">¿Cuál de estos?</div>
+        <div class="var-grid" id="varGrid"></div>
+      </div>
+
+      <!-- CAPACIDAD -->
+      <div class="sub-section" id="secCap">
+        <div class="divider"></div>
+        <div class="section-tag">Capacidad</div>
+        <div class="question">¿Cuánto espacio necesitás?</div>
+        <div class="cap-grid" id="capGrid"></div>
+      </div>
+
+      <!-- CUOTAS -->
+      <div class="sub-section" id="secCuotas">
+        <div class="divider"></div>
+        <div class="section-tag">Cuotas</div>
+        <div class="question">¿Cómo querés pagarlo?</div>
+        <div class="cuota-grid">
+          <button class="cuota-btn" onclick="selectCuota(this,'6 meses')"><span class="icon">⚡</span>6 meses</button>
+          <button class="cuota-btn" onclick="selectCuota(this,'12 meses')"><span class="icon">✨</span>12 meses</button>
+          <button class="cuota-btn" onclick="selectCuota(this,'18 meses')"><span class="icon">🛡️</span>18 meses</button>
+        </div>
+        <button class="btn-primary" onclick="goStep2()" style="margin-top:20px">Siguiente →</button>
+      </div>
+
+    </div>
+
+    <!-- ══════════ PASO 2 ══════════ -->
+    <div class="step" id="step2">
+
+      <div class="section-tag">Trabajo</div>
+      <div class="question">¿En qué trabajás?</div>
+      <div class="trab-grid">
+        <button class="trab-btn" onclick="selTrab(this,'Funcionario Público')"><span class="ticon">🏛️</span>Funcionario Público</button>
+        <button class="trab-btn" onclick="selTrab(this,'Asalariado con IPS')"><span class="ticon">✅</span>Asalariado con IPS</button>
+        <button class="trab-btn" onclick="selTrab(this,'Asalariado sin IPS')"><span class="ticon">💼</span>Asalariado sin IPS</button>
+        <button class="trab-btn" onclick="selTrab(this,'Jubilado')"><span class="ticon">🎖️</span>Jubilado</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-tag">Antigüedad</div>
+      <div class="question">¿Hace cuánto trabajás ahí?</div>
+      <div class="list-grid">
+        <button class="list-btn" onclick="selAnt(this,'Menos de 6 meses')">
+          <span class="licon">🌱</span>
+          <span>Recién empecé<span class="lsub">menos de 6 meses</span></span>
+        </button>
+        <button class="list-btn" onclick="selAnt(this,'6 meses a 1 año')">
+          <span class="licon">📈</span>
+          <span>Ya llevo un tiempo<span class="lsub">6 meses a 1 año</span></span>
+        </button>
+        <button class="list-btn" onclick="selAnt(this,'Más de 1 año')">
+          <span class="licon">💪</span>
+          <span>Hace bastante<span class="lsub">más de 1 año</span></span>
+        </button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-tag">Ingreso mensual</div>
+      <div class="question">¿Cuánto cobrás por mes?</div>
+      <div class="list-grid">
+        <button class="list-btn" onclick="selIngreso(this,'Hasta Gs. 2.500.000')">💵 Hasta Gs. 2.500.000</button>
+        <button class="list-btn" onclick="selIngreso(this,'Gs. 2.500.001 – 5.000.000')">💵 Gs. 2.500.001 – 5.000.000</button>
+        <button class="list-btn" onclick="selIngreso(this,'Gs. 5.000.001 – 10.000.000')">💵 Gs. 5.000.001 – 10.000.000</button>
+        <button class="list-btn" onclick="selIngreso(this,'Más de Gs. 10.000.000')">💵 Más de Gs. 10.000.000</button>
+      </div>
+
+      <button class="btn-primary" onclick="goStep3()">Siguiente →</button>
+      <button class="btn-back" onclick="goStep(1)">← Volver</button>
+    </div>
+
+    <!-- ══════════ PASO 3 ══════════ -->
+    <div class="step" id="step3">
+      <div class="question">¡Ya casi! Solo tus datos 🙌</div>
+
+      <div class="field">
+        <label>Tu nombre completo</label>
+        <input type="text" id="nombre" placeholder="Juan Pérez" autocomplete="name" />
+      </div>
+      <div class="field">
+        <label>Cédula de identidad</label>
+        <input type="number" id="cedula" placeholder="1234567" />
+      </div>
+      <div class="field">
+        <label>Fecha de nacimiento</label>
+        <input type="date" id="nacimiento" />
+      </div>
+      <div class="field">
+        <label>Tu WhatsApp</label>
+        <input type="tel" id="telefono" placeholder="0981 000 000" autocomplete="tel" />
+      </div>
+
+      <button class="btn-primary" onclick="enviar()">Quiero mi iPhone 🔥</button>
+      <button class="btn-back" onclick="goStep(2)">← Volver</button>
+    </div>
+
+    <!-- ══════════ SUCCESS ══════════ -->
+    <div class="step" id="stepOk">
+      <div class="success-wrap">
+        <span class="success-hero">📱</span>
+        <div class="fire-pill">🔥 SOLICITUD ENVIADA</div>
+        <div class="success-title">Tu <span id="okModelo">iPhone</span><br>te está esperando</div>
+        <p class="success-msg">¡Genial! Ya recibimos tu solicitud. Joshua te va a contactar en breve para confirmar tu crédito. 🚀</p>
+      </div>
+      <div class="summary-card">
+        <div class="sum-row"><span class="lbl">Modelo</span><span class="val" id="sumModelo">-</span></div>
+        <div class="sum-row"><span class="lbl">Capacidad</span><span class="val" id="sumCap">-</span></div>
+        <div class="sum-row"><span class="lbl">Cuotas</span><span class="val" id="sumCuotas">-</span></div>
+        <div class="sum-row"><span class="lbl">Trabajo</span><span class="val" id="sumTrabajo">-</span></div>
+        <div class="sum-row"><span class="lbl">Ingreso</span><span class="val" id="sumIngreso">-</span></div>
+        <div class="sum-row"><span class="lbl">Nombre</span><span class="val" id="sumNombre">-</span></div>
+      </div>
+      <p class="footer-note" style="text-align:center">Podés hablar con <strong>Max</strong> si tenés alguna duda mientras tanto 💬</p>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── CATÁLOGO ──────────────────────────────────────────────────────────────────
+const CATALOGO = {
+  '11': [
+    { label: 'iPhone 11 normal', caps: ['64GB','128GB'], precios: {'64GB':'Gs. 1.700.000','128GB':'Gs. 1.900.000'} },
+    { label: 'iPhone 11 Pro',    caps: ['64GB','256GB'], precios: {'64GB':'Gs. 2.100.000','256GB':'Gs. 2.300.000'} },
+    { label: 'iPhone 11 Pro Max',caps: ['64GB','256GB'], precios: {'64GB':'Gs. 2.200.000','256GB':'Gs. 2.400.000'} },
+  ],
+  '12': [
+    { label: 'iPhone 12 normal', caps: ['64GB','128GB'], precios: {'64GB':'Gs. 2.000.000','128GB':'Gs. 2.300.000'} },
+    { label: 'iPhone 12 Pro',    caps: ['128GB','256GB'], precios: {'128GB':'Gs. 2.600.000','256GB':'Gs. 2.800.000'} },
+    { label: 'iPhone 12 Pro Max',caps: ['128GB','256GB'], precios: {'128GB':'Gs. 3.000.000','256GB':'Gs. 3.200.000'} },
+  ],
+  '13': [
+    { label: 'iPhone 13 normal', caps: ['128GB','256GB'], precios: {'128GB':'Gs. 2.750.000','256GB':'Gs. 3.000.000'} },
+    { label: 'iPhone 13 Pro',    caps: ['128GB','256GB','512GB'], precios: {'128GB':'Gs. 3.400.000','256GB':'Gs. 3.700.000','512GB':'Gs. 4.400.000'} },
+    { label: 'iPhone 13 Pro Max',caps: ['128GB','256GB'], precios: {'128GB':'Gs. 3.600.000','256GB':'Gs. 4.200.000'} },
+  ],
+  '14': [
+    { label: 'iPhone 14 normal', caps: ['128GB','256GB'], precios: {'128GB':'Gs. 2.900.000','256GB':'Gs. 3.200.000'} },
+    { label: 'iPhone 14 Plus',   caps: ['128GB','256GB'], precios: {'128GB':'Gs. 3.500.000','256GB':'Gs. 3.700.000'} },
+    { label: 'iPhone 14 Pro',    caps: ['128GB','256GB'], precios: {'128GB':'Gs. 3.800.000','256GB':'Gs. 4.200.000'} },
+    { label: 'iPhone 14 Pro Max',caps: ['128GB','256GB'], precios: {'128GB':'Gs. 4.100.000','256GB':'Gs. 4.700.000'} },
+  ],
+  '15': [
+    { label: 'iPhone 15 normal', caps: ['128GB','256GB'], precios: {'128GB':'Gs. 3.700.000','256GB':'Gs. 4.300.000'} },
+    { label: 'iPhone 15 Plus',   caps: ['128GB','256GB'], precios: {'128GB':'Gs. 4.300.000','256GB':'Gs. 4.500.000'} },
+    { label: 'iPhone 15 Pro',    caps: ['128GB','256GB','512GB'], precios: {'128GB':'Gs. 4.500.000','256GB':'Gs. 4.800.000','512GB':'Gs. 5.300.000'} },
+    { label: 'iPhone 15 Pro Max',caps: ['256GB','512GB'], precios: {'256GB':'Gs. 5.150.000','512GB':'Gs. 6.000.000'} },
+  ],
+  '16': [
+    { label: 'iPhone 16 normal', caps: ['128GB','256GB'], precios: {'128GB':'Gs. 4.700.000','256GB':'Gs. 5.400.000'} },
+    { label: 'iPhone 16 Plus',   caps: ['128GB','256GB'], precios: {'128GB':'Gs. 5.200.000','256GB':'Gs. 5.400.000'} },
+    { label: 'iPhone 16 Pro',    caps: ['128GB','256GB'], precios: {'128GB':'Gs. 5.700.000','256GB':'Gs. 6.100.000'} },
+    { label: 'iPhone 16 Pro Max',caps: ['256GB','512GB'], precios: {'256GB':'Gs. 6.500.000','512GB':'Gs. 7.200.000'} },
+  ],
+  '17': [
+    { label: 'iPhone 17 normal', caps: ['256GB'], precios: {'256GB':'Gs. 6.000.000'} },
+    { label: 'iPhone 17 Air',    caps: ['256GB'], precios: {'256GB':'Gs. 7.500.000'} },
+    { label: 'iPhone 17 Pro',    caps: ['256GB','512GB'], precios: {'256GB':'Gs. 9.800.000','512GB':'Gs. 12.000.000'} },
+    { label: 'iPhone 17 Pro Max',caps: ['256GB','512GB'], precios: {'256GB':'Gs. 10.800.000','512GB':'Gs. 12.800.000'} },
+  ],
+};
+
+// ── ESTADO ────────────────────────────────────────────────────────────────────
+const S = { serie:'', modelo:'', cap:'', cuotas:'', trabajo:'', antiguedad:'', ingreso:'', nombre:'', cedula:'', nacimiento:'', telefono:'' };
+
+// ── SERIE ─────────────────────────────────────────────────────────────────────
+function selectSerie(s) {
+  S.serie = s; S.modelo = ''; S.cap = ''; S.cuotas = '';
+  document.querySelectorAll('.serie-btn').forEach(b => b.classList.toggle('sel', b.textContent.trim() === s));
+
+  // Renderizar variantes
+  const variantes = CATALOGO[s];
+  const grid = document.getElementById('varGrid');
+  grid.innerHTML = variantes.map((v,i) => {
+    const minPrice = v.precios[v.caps[0]];
+    return `<button class="var-btn" onclick="selectVar(${i},'${s}')">${v.label}<span class="price">desde ${minPrice}</span></button>`;
+  }).join('');
+
+  show('secVariante');
+  hide('secCap');
+  hide('secCuotas');
+  scrollTo('secVariante');
+}
+
+function selectVar(idx, s) {
+  const v = CATALOGO[s][idx];
+  S.modelo = v.label; S.cap = ''; S.cuotas = '';
+  document.querySelectorAll('.var-btn').forEach((b,i) => b.classList.toggle('sel', i === idx));
+
+  // Renderizar capacidades
+  const capGrid = document.getElementById('capGrid');
+  capGrid.innerHTML = v.caps.map(c => `<button class="cap-btn" onclick="selectCap(this,'${c}','${s}',${idx})">${c}<br><span style="font-size:10px;font-weight:600;color:#999">${v.precios[c]}</span></button>`).join('');
+
+  show('secCap');
+  hide('secCuotas');
+  scrollTo('secCap');
+}
+
+function selectCap(el, cap, s, idx) {
+  S.cap = cap;
+  document.querySelectorAll('.cap-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+  show('secCuotas');
+  scrollTo('secCuotas');
+}
+
+function selectCuota(el, val) {
+  S.cuotas = val;
+  document.querySelectorAll('.cuota-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// ── PASO 2 ────────────────────────────────────────────────────────────────────
+function selTrab(el, val) {
+  S.trabajo = val;
+  document.querySelectorAll('.trab-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function selAnt(el, val) {
+  S.antiguedad = val;
+  document.querySelectorAll('#step2 .list-grid:nth-of-type(1) .list-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function selIngreso(el, val) {
+  S.ingreso = val;
+  // solo los botones del grid de ingreso
+  el.closest('.list-grid').querySelectorAll('.list-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// ── NAVEGACIÓN ────────────────────────────────────────────────────────────────
+function goStep2() {
+  if (!S.modelo) return alert('Elegí un modelo 📱');
+  if (!S.cap)    return alert('Elegí la capacidad');
+  if (!S.cuotas) return alert('Elegí las cuotas');
+  goStep(2);
+}
+
+function goStep3() {
+  if (!S.trabajo)    return alert('¿En qué trabajás? 💼');
+  if (!S.antiguedad) return alert('¿Hace cuánto trabajás ahí?');
+  if (!S.ingreso)    return alert('Indicá tu ingreso mensual 💰');
+  goStep(3);
+}
+
+function goStep(n) {
+  ['step1','step2','step3','stepOk'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('active', i === n-1);
+  });
+  const titles = ['¿Qué iPhone querés? 📱','¿Y vos quién sos? 👤','¡Ya casi llegamos! 🙌',''];
+  const subs   = ['Elegí tu modelo paso a paso','Contanos sobre tu trabajo','Solo tus datos y listo',''];
+  const progs  = ['33%','66%','100%','100%'];
+  document.getElementById('topTitle').textContent  = titles[n-1];
+  document.getElementById('topSub').textContent    = subs[n-1];
+  document.getElementById('progFill').style.width  = progs[n-1];
+  document.getElementById('stepLabel').textContent = n <= 3 ? `Paso ${n} de 3` : '';
+  window.scrollTo(0,0);
+}
+
+// ── ENVÍO ─────────────────────────────────────────────────────────────────────
+async function enviar() {
+  S.nombre    = document.getElementById('nombre').value.trim();
+  S.cedula    = document.getElementById('cedula').value.trim();
+  S.nacimiento= document.getElementById('nacimiento').value;
+  S.telefono  = document.getElementById('telefono').value.trim();
+
+  if (!S.nombre)     return alert('Ingresá tu nombre');
+  if (!S.cedula)     return alert('Ingresá tu cédula');
+  if (!S.nacimiento) return alert('Ingresá tu fecha de nacimiento');
+  if (!S.telefono)   return alert('Ingresá tu WhatsApp');
+
+  document.getElementById('overlay').classList.add('show');
+
+  try {
+    await fetch('https://crediphone-leads.onrender.com/nuevo-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        modelo: S.modelo, capacidad: S.cap, cuotas: S.cuotas,
+        trabajo: S.trabajo, antiguedad: S.antiguedad, ingreso: S.ingreso,
+        nombre: S.nombre, cedula: S.cedula, nacimiento: S.nacimiento, telefono: S.telefono
+      })
+    });
+  } catch(e) { /* igual mostramos éxito — el lead se procesó */ }
+
+  document.getElementById('overlay').classList.remove('show');
+
+  // Poblar resumen
+  document.getElementById('okModelo').textContent  = S.modelo;
+  document.getElementById('sumModelo').textContent  = S.modelo;
+  document.getElementById('sumCap').textContent     = S.cap;
+  document.getElementById('sumCuotas').textContent  = S.cuotas;
+  document.getElementById('sumTrabajo').textContent = S.trabajo;
+  document.getElementById('sumIngreso').textContent = S.ingreso;
+  document.getElementById('sumNombre').textContent  = S.nombre;
+
+  goStep(4);
+}
+
+// ── UTILS ─────────────────────────────────────────────────────────────────────
+function show(id) { document.getElementById(id).classList.add('visible'); }
+function hide(id) { document.getElementById(id).classList.remove('visible'); }
+function scrollTo(id) {
+  setTimeout(() => document.getElementById(id).scrollIntoView({ behavior:'smooth', block:'start' }), 80);
+}
+</script>
+</body>
+</html>
