@@ -424,7 +424,11 @@
       </div>
       <div class="field">
         <label>Fecha de nacimiento</label>
-        <input type="date" id="nacimiento" />
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1.6fr; gap:8px;">
+          <input type="number" id="fDia" placeholder="Día" min="1" max="31" style="text-align:center" />
+          <input type="number" id="fMes" placeholder="Mes" min="1" max="12" style="text-align:center" />
+          <input type="number" id="fAnio" placeholder="Año" min="1940" max="2010" style="text-align:center" />
+        </div>
       </div>
       <div class="field">
         <label>Tu WhatsApp</label>
@@ -602,14 +606,18 @@ function goStep(n) {
 
 // ── ENVÍO ─────────────────────────────────────────────────────────────────────
 async function enviar() {
-  S.nombre    = document.getElementById('nombre').value.trim();
-  S.cedula    = document.getElementById('cedula').value.trim();
-  S.nacimiento= document.getElementById('nacimiento').value;
-  S.telefono  = document.getElementById('telefono').value.trim();
+  S.nombre   = document.getElementById('nombre').value.trim();
+  S.cedula   = document.getElementById('cedula').value.trim();
+  S.telefono = document.getElementById('telefono').value.trim();
+
+  const dia  = document.getElementById('fDia').value.trim().padStart(2,'0');
+  const mes  = document.getElementById('fMes').value.trim().padStart(2,'0');
+  const anio = document.getElementById('fAnio').value.trim();
+  S.nacimiento = (dia && mes && anio && anio.length === 4) ? `${dia}/${mes}/${anio}` : '';
 
   if (!S.nombre)     return alert('Ingresá tu nombre');
   if (!S.cedula)     return alert('Ingresá tu cédula');
-  if (!S.nacimiento) return alert('Ingresá tu fecha de nacimiento');
+  if (!S.nacimiento) return alert('Ingresá tu fecha de nacimiento completa (día, mes y año)');
   if (!S.telefono)   return alert('Ingresá tu WhatsApp');
 
   document.getElementById('overlay').classList.add('show');
