@@ -23,6 +23,7 @@ CRITERIOS DE CALIFICACIÓN:
 - Cumple con empleo y salario pero tiene menos de 6 meses de antigüedad
 ❌ NO CALIFICADO si:
 - Salario menor a Gs. 2.500.000
+IMPORTANTE: Nunca resumas, abrevies ni modifiques los datos del formulario. Envía SIEMPRE todos los campos exactamente como llegaron, sin omitir ninguno.
 Respondé SIEMPRE en este formato JSON exacto sin markdown:
 {
   "estado": "CALIFICADO" | "REVISAR" | "NO_CALIFICADO",
@@ -116,20 +117,12 @@ app.post('/nuevo-lead', async (req, res) => {
       return res.status(400).json({ error: 'Faltan datos requeridos' });
     }
 
-    // Calcular edad
-    let edad = '';
-    if (nacimiento) {
-      const hoy = new Date();
-      const nac = new Date(nacimiento);
-      edad = hoy.getFullYear() - nac.getFullYear() + ' años';
-    }
-
     // Análisis IA del solicitante
     const mensajeParaClaude = `
 Analiza este solicitante de financiamiento de iPhone:
 - Nombre: ${nombre}
 - Cédula: ${cedula}
-- Edad: ${edad}
+- Fecha de nacimiento: ${nacimiento}
 - Teléfono: ${telefono}
 - Trabajo: ${trabajo}
 - Antigüedad: ${antiguedad}
@@ -169,7 +162,7 @@ Analiza este solicitante de financiamiento de iPhone:
 👤 *Datos del cliente:*
 • Nombre: ${nombre}
 • Cédula: ${cedula}
-• Edad: ${edad}
+• Fecha de nacimiento: ${nacimiento}
 • WhatsApp: ${telefono}
 • Trabajo: ${trabajo}
 • Antigüedad: ${antiguedad}
