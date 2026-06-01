@@ -193,25 +193,31 @@
         <button class="trab-btn" onclick="selTrab(this,'Otros')"><span class="ticon">🙋</span>Otros</button>
       </div>
 
-      <div class="divider"></div>
-      <div class="section-tag">Antigüedad</div>
-      <div class="question">¿Hace cuánto trabajás ahí?</div>
-      <div class="list-grid" id="antGrid">
-        <button class="list-btn" onclick="selAnt(this,'Menos de 6 meses')"><span class="licon">🌱</span><span>Recién empecé<span class="lsub">menos de 6 meses</span></span></button>
-        <button class="list-btn" onclick="selAnt(this,'6 meses a 1 año')"><span class="licon">📈</span><span>Ya llevo un tiempo<span class="lsub">6 meses a 1 año</span></span></button>
-        <button class="list-btn" onclick="selAnt(this,'Más de 1 año')"><span class="licon">💪</span><span>Hace bastante<span class="lsub">más de 1 año</span></span></button>
+      <div class="sub-section" id="secAnt">
+        <div class="divider"></div>
+        <div class="section-tag">Antigüedad</div>
+        <div class="question">¿Hace cuánto trabajás ahí?</div>
+        <div class="list-grid" id="antGrid">
+          <button class="list-btn" onclick="selAnt(this,'Menos de 6 meses')"><span class="licon">🌱</span><span>Recién empecé<span class="lsub">menos de 6 meses</span></span></button>
+          <button class="list-btn" onclick="selAnt(this,'6 meses a 1 año')"><span class="licon">📈</span><span>Ya llevo un tiempo<span class="lsub">6 meses a 1 año</span></span></button>
+          <button class="list-btn" onclick="selAnt(this,'Más de 1 año')"><span class="licon">💪</span><span>Hace bastante<span class="lsub">más de 1 año</span></span></button>
+        </div>
       </div>
 
-      <div class="divider"></div>
-      <div class="section-tag">Ingreso mensual</div>
-      <div class="question">¿Cuánto cobrás por mes?</div>
-      <div class="list-grid" id="ingresoGrid">
-        <button class="list-btn" onclick="selIngreso(this,'Menos de Gs. 2.900.000')">💵 Menos de Gs. 2.900.000</button>
-        <button class="list-btn" onclick="selIngreso(this,'Gs. 2.901.000 a 3.499.000')">💵 Gs. 2.901.000 a 3.499.000</button>
-        <button class="list-btn" onclick="selIngreso(this,'Gs. 3.500.000 o más')">💵 Gs. 3.500.000 o más</button>
+      <div class="sub-section" id="secIngreso">
+        <div class="divider"></div>
+        <div class="section-tag">Ingreso mensual</div>
+        <div class="question">¿Cuánto cobrás por mes?</div>
+        <div class="list-grid" id="ingresoGrid">
+          <button class="list-btn" onclick="selIngreso(this,'Menos de Gs. 2.900.000')">💵 Menos de Gs. 2.900.000</button>
+          <button class="list-btn" onclick="selIngreso(this,'Gs. 2.901.000 a 3.499.000')">💵 Gs. 2.901.000 a 3.499.000</button>
+          <button class="list-btn" onclick="selIngreso(this,'Gs. 3.500.000 o más')">💵 Gs. 3.500.000 o más</button>
+        </div>
       </div>
 
-      <button class="btn-primary" onclick="goStep3()">Siguiente →</button>
+      <div class="sub-section" id="secSiguiente">
+        <button class="btn-primary" onclick="goStep3()" style="margin-top:8px">Siguiente →</button>
+      </div>
       <button class="btn-back" onclick="goStep(1)">← Volver</button>
     </div>
 
@@ -230,28 +236,28 @@
 
       <div class="field">
         <label>Fecha de nacimiento</label>
-        <div class="wheel-wrap">
-          <div class="wheel-col">
-            <label>Día</label>
-            <div class="wheel-outer" id="wDia">
-              <div class="wheel-selector"></div>
-              <div class="wheel-inner" id="wiDia"></div>
-            </div>
-          </div>
-          <div class="wheel-col">
-            <label>Mes</label>
-            <div class="wheel-outer" id="wMes">
-              <div class="wheel-selector"></div>
-              <div class="wheel-inner" id="wiMes"></div>
-            </div>
-          </div>
-          <div class="wheel-col">
-            <label>Año</label>
-            <div class="wheel-outer" id="wAnio">
-              <div class="wheel-selector"></div>
-              <div class="wheel-inner" id="wiAnio"></div>
-            </div>
-          </div>
+        <div style="display:flex; gap:8px;">
+          <select id="selDia" style="flex:1; padding:13px 8px; border:2px solid #e8e8e8; border-radius:12px; font-family:'Nunito',sans-serif; font-size:15px; font-weight:600; color:#111; background:#f7f7f7; outline:none; -webkit-appearance:none; text-align:center;">
+            <option value="">Día</option>
+          </select>
+          <select id="selMes" style="flex:1.4; padding:13px 8px; border:2px solid #e8e8e8; border-radius:12px; font-family:'Nunito',sans-serif; font-size:15px; font-weight:600; color:#111; background:#f7f7f7; outline:none; -webkit-appearance:none; text-align:center;">
+            <option value="">Mes</option>
+            <option value="01">Ene</option>
+            <option value="02">Feb</option>
+            <option value="03">Mar</option>
+            <option value="04">Abr</option>
+            <option value="05">May</option>
+            <option value="06">Jun</option>
+            <option value="07">Jul</option>
+            <option value="08">Ago</option>
+            <option value="09">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dic</option>
+          </select>
+          <select id="selAnio" style="flex:1.2; padding:13px 8px; border:2px solid #e8e8e8; border-radius:12px; font-family:'Nunito',sans-serif; font-size:15px; font-weight:600; color:#111; background:#f7f7f7; outline:none; -webkit-appearance:none; text-align:center;">
+            <option value="">Año</option>
+          </select>
         </div>
       </div>
 
@@ -330,66 +336,31 @@ const CATALOGO = {
   ],
 };
 
-const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+function initSelects() {
+  // Días
+  const selDia = document.getElementById('selDia');
+  if (selDia.options.length === 1) {
+    for (let d = 1; d <= 31; d++) {
+      const o = document.createElement('option');
+      o.value = String(d).padStart(2,'0');
+      o.textContent = String(d).padStart(2,'0');
+      selDia.appendChild(o);
+    }
+  }
+  // Años — desde año actual hacia atrás hasta 1940
+  const selAnio = document.getElementById('selAnio');
+  if (selAnio.options.length === 1) {
+    const anioActual = new Date().getFullYear() - 18;
+    for (let y = anioActual; y >= 1940; y--) {
+      const o = document.createElement('option');
+      o.value = y;
+      o.textContent = y;
+      selAnio.appendChild(o);
+    }
+  }
+}
+
 const S = { serie:'', modelo:'', cap:'', cuotas:'', trabajo:'', antiguedad:'', ingreso:'', nombre:'', cedula:'', nacimiento:'', telefono:'' };
-let wheelDia = 1, wheelMes = 1, wheelAnio = 1997;
-
-// ── WHEEL PICKER ──────────────────────────────────────────────────────────────
-function buildWheel(innerId, items, defaultIdx, onSelect) {
-  const inner = document.getElementById(innerId);
-  inner.innerHTML = items.map((it, i) => `<div class="wheel-item" data-idx="${i}">${it}</div>`).join('');
-  let currentIdx = defaultIdx;
-
-  function update(idx) {
-    currentIdx = Math.max(0, Math.min(items.length - 1, idx));
-    inner.style.transform = `translateY(${-currentIdx * 44}px)`;
-    inner.querySelectorAll('.wheel-item').forEach((el, i) => el.classList.toggle('active', i === currentIdx));
-    onSelect(currentIdx);
-  }
-
-  update(currentIdx);
-
-  let startY = 0, startIdx = 0, isDragging = false;
-
-  function onStart(e) {
-    isDragging = true;
-    startY = (e.touches ? e.touches[0].clientY : e.clientY);
-    startIdx = currentIdx;
-    inner.style.transition = 'none';
-  }
-
-  function onMove(e) {
-    if (!isDragging) return;
-    e.preventDefault();
-    const y = (e.touches ? e.touches[0].clientY : e.clientY);
-    const delta = Math.round((startY - y) / 44);
-    update(startIdx + delta);
-  }
-
-  function onEnd() {
-    if (!isDragging) return;
-    isDragging = false;
-    inner.style.transition = 'transform 0.2s ease';
-    update(currentIdx);
-  }
-
-  inner.addEventListener('touchstart', onStart, { passive: true });
-  inner.addEventListener('touchmove', onMove, { passive: false });
-  inner.addEventListener('touchend', onEnd);
-  inner.addEventListener('mousedown', onStart);
-  window.addEventListener('mousemove', onMove);
-  window.addEventListener('mouseup', onEnd);
-}
-
-function initWheels() {
-  const dias = Array.from({length: 31}, (_, i) => String(i+1).padStart(2,'0'));
-  const meses = MESES;
-  const anios = Array.from({length: 77}, (_, i) => String(1950 + i));
-
-  buildWheel('wiDia', dias, 13, idx => { wheelDia = idx + 1; });
-  buildWheel('wiMes', meses, 4, idx => { wheelMes = idx + 1; });
-  buildWheel('wiAnio', anios, 47, idx => { wheelAnio = 1950 + idx; });
-}
 
 // ── CATÁLOGO ──────────────────────────────────────────────────────────────────
 function selectSerie(s) {
@@ -430,18 +401,28 @@ function selTrab(el, val) {
   S.trabajo = val;
   document.querySelectorAll('.trab-btn').forEach(b => b.classList.remove('sel'));
   el.classList.add('sel');
+  hide('secAnt'); hide('secIngreso'); hide('secSiguiente');
+  S.antiguedad = ''; S.ingreso = '';
+  document.querySelectorAll('#antGrid .list-btn').forEach(b => b.classList.remove('sel'));
+  document.querySelectorAll('#ingresoGrid .list-btn').forEach(b => b.classList.remove('sel'));
+  show('secAnt'); scrollSmooth('secAnt');
 }
 
 function selAnt(el, val) {
   S.antiguedad = val;
   document.querySelectorAll('#antGrid .list-btn').forEach(b => b.classList.remove('sel'));
   el.classList.add('sel');
+  hide('secIngreso'); hide('secSiguiente');
+  S.ingreso = '';
+  document.querySelectorAll('#ingresoGrid .list-btn').forEach(b => b.classList.remove('sel'));
+  show('secIngreso'); scrollSmooth('secIngreso');
 }
 
 function selIngreso(el, val) {
   S.ingreso = val;
   document.querySelectorAll('#ingresoGrid .list-btn').forEach(b => b.classList.remove('sel'));
   el.classList.add('sel');
+  show('secSiguiente'); scrollSmooth('secSiguiente');
 }
 
 // ── NAVEGACIÓN ────────────────────────────────────────────────────────────────
@@ -471,7 +452,7 @@ function goStep(n) {
   document.getElementById('progFill').style.width = progs[n-1];
   document.getElementById('stepLabel').textContent = n <= 3 ? `Paso ${n} de 3` : '';
   window.scrollTo(0,0);
-  if (n === 3) setTimeout(initWheels, 100);
+  if (n === 3) setTimeout(initSelects, 100);
 }
 
 // ── ENVÍO ─────────────────────────────────────────────────────────────────────
@@ -480,9 +461,11 @@ async function enviar() {
   S.cedula   = document.getElementById('cedula').value.trim();
   S.telefono = document.getElementById('telefono').value.trim();
 
-  const dia  = String(wheelDia).padStart(2,'0');
-  const mes  = String(wheelMes).padStart(2,'0');
-  const anio = String(wheelAnio);
+  const dia  = document.getElementById('selDia').value;
+  const mes  = document.getElementById('selMes').value;
+  const anio = document.getElementById('selAnio').value;
+
+  if (!dia || !mes || !anio) return alert('Ingresá tu fecha de nacimiento completa');
   S.nacimiento = `${dia}/${mes}/${anio}`;
 
   if (!S.nombre)   return alert('Ingresá tu nombre');
