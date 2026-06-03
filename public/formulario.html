@@ -64,7 +64,7 @@
   .list-grid { display: grid; gap: 10px; margin-bottom: 6px; }
   .list-btn { padding: 15px 16px; background: #f5f5f5; border: 2px solid #e8e8e8; border-radius: 14px; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700; color: #333; cursor: pointer; transition: all 0.15s; text-align: left; display: flex; align-items: center; gap: 10px; }
   .list-btn .licon { font-size: 20px; flex-shrink: 0; }
-  .list-btn .lsub { display: block; font-size: 11px; font-weight: 600; color: #999; margin-top: 2px; }
+  .list-btn .lsub { display: block; font-size: 13px; font-weight: 600; color: #777; margin-top: 2px; }
   .list-btn.sel { background: #fff0f0; border-color: #CC0000; color: #CC0000; }
   .list-btn.sel .lsub { color: #e06060; }
 
@@ -266,6 +266,14 @@
       </div>
 
       <div class="divider"></div>
+      <div class="section-tag">Entrega</div>
+      <div class="question">¿Entregás algún equipo o efectivo?</div>
+      <div class="cap-grid" id="entregaGrid">
+        <button class="cap-btn" id="btn-sin-entrega" onclick="selEntrega(this,'Sin entrega')">Sin entrega</button>
+        <button class="cap-btn" id="btn-con-entrega" onclick="selEntrega(this,'Con entrega')">Con entrega</button>
+      </div>
+
+      <div class="divider"></div>
       <div class="section-tag">Cuotas</div>
       <div class="question">¿Cómo querés pagarlo?</div>
       <div class="cuota-grid">
@@ -303,11 +311,11 @@
       <div class="sub-section" id="secIngreso">
         <div class="divider"></div>
         <div class="section-tag">Ingreso mensual</div>
-        <div class="question">¿Cuánto cobrás por mes?</div>
+        <div class="question">¿Cuáles son tus ingresos mensuales?</div>
         <div class="list-grid" id="ingresoGrid">
-          <button class="list-btn" onclick="selIngreso(this,'Menos de Gs. 2.900.000')">💵 Menos de Gs. 2.900.000</button>
-          <button class="list-btn" onclick="selIngreso(this,'Gs. 2.901.000 a 3.499.000')">💵 Gs. 2.901.000 a 3.499.000</button>
-          <button class="list-btn" onclick="selIngreso(this,'Gs. 3.500.000 o más')">💵 Gs. 3.500.000 o más</button>
+          <button class="list-btn" onclick="selIngreso(this,'Menos de Gs. 2.500.000')">💵 Menos de Gs. 2.500.000</button>
+          <button class="list-btn" onclick="selIngreso(this,'Entre Gs. 2.500.000 y Gs. 2.999.999')">💵 Entre Gs. 2.500.000 y Gs. 2.999.999</button>
+          <button class="list-btn" onclick="selIngreso(this,'Gs. 3.000.000 o más')">💵 Gs. 3.000.000 o más</button>
         </div>
       </div>
 
@@ -444,7 +452,7 @@ const CATALOGO = [
   { label: 'iPhone 17 Pro Max nuevo', caps: ['256GB','512GB'] },
 ];
 
-const S = { modelo: CATALOGO[0].label, cap: CATALOGO[0].caps[0], cuotas: '', trabajo: '', antiguedad: '', ingreso: '', nombre: '', cedula: '', nacimiento: '', telefono: '' };
+const S = { modelo: CATALOGO[0].label, cap: CATALOGO[0].caps[0], cuotas: '', entrega: '', trabajo: '', antiguedad: '', ingreso: '', nombre: '', cedula: '', nacimiento: '', telefono: '' };
 
 // ── WHEEL PICKER ──────────────────────────────────────────────────────────────
 function makeWheel(outerEl, innerEl, items, onChange) {
@@ -601,6 +609,12 @@ function selIngreso(el, val) {
   show('secSiguiente'); scrollSmooth('secSiguiente');
 }
 
+function selEntrega(el, val) {
+  S.entrega = val;
+  document.querySelectorAll('#entregaGrid .cap-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
 function selectCuota(el, val) {
   S.cuotas = val;
   document.querySelectorAll('.cuota-btn').forEach(b => b.classList.remove('sel'));
@@ -611,6 +625,7 @@ function selectCuota(el, val) {
 function goStep2() {
   if (!S.modelo) return alert('Elegí un modelo 📱');
   if (!S.cap)    return alert('Elegí la capacidad');
+  if (!S.entrega) return alert('Indicá si vas a entregar algo');
   if (!S.cuotas) return alert('Elegí las cuotas');
   goStep(2);
 }
@@ -626,8 +641,8 @@ function goStep(n) {
   ['step1','step2','step3','stepOk'].forEach((id,i) => {
     document.getElementById(id).classList.toggle('active', i === n-1);
   });
-  const titles = ['Elegí el iPhone ideal para vos 📱','¿Y vos quién sos? 👤','¡Ya casi llegamos! 🙌',''];
-  const subs   = ['Elegí tu modelo paso a paso','Contanos sobre tu trabajo','Solo tus datos y listo',''];
+  const titles = ['Elegí el iPhone ideal para vos 📱','Contanos más sobre vos 😊','¡Ya casi llegamos! 🙌',''];
+  const subs   = ['Elegí tu modelo paso a paso','Solo un par de preguntas rápidas','Solo tus datos y listo',''];
   const progs  = ['33%','66%','100%','100%'];
   document.getElementById('topTitle').textContent = titles[n-1];
   document.getElementById('topSub').textContent   = subs[n-1];
@@ -661,7 +676,7 @@ async function enviar() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        modelo: S.modelo, capacidad: S.cap, cuotas: S.cuotas,
+        modelo: S.modelo, capacidad: S.cap, cuotas: S.cuotas, entrega: S.entrega,
         trabajo: S.trabajo, antiguedad: S.antiguedad, ingreso: S.ingreso,
         nombre: S.nombre, cedula: S.cedula, nacimiento: S.nacimiento, telefono: S.telefono
       })
