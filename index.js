@@ -108,7 +108,7 @@ ${analisis.razon}
 app.post('/nuevo-lead', async (req, res) => {
   try {
     const {
-      modelo, capacidad, cuotas,
+      modelo, capacidad, cuotas, entrega,
       antiguedad, trabajo, ingreso,
       nombre, cedula, nacimiento, telefono
     } = req.body;
@@ -128,6 +128,7 @@ Analiza este solicitante de financiamiento de iPhone:
 - Antigüedad: ${antiguedad}
 - Ingreso mensual: ${ingreso}
 - iPhone solicitado: ${modelo} ${capacidad} en ${cuotas}
+- Entrega: ${entrega || 'Sin entrega'}
     `;
 
     const response = await anthropic.messages.create({
@@ -151,6 +152,9 @@ Analiza este solicitante de financiamiento de iPhone:
       };
     }
 
+    // Emoji entrega
+    const entregaEmoji = entrega === 'Con entrega' ? '♻️ Con entrega de equipo/efectivo' : '💳 Sin entrega';
+
     // Mensaje WhatsApp para Joshua
     const mensajeWA = `${analisis.emoji} *NUEVO LEAD IPHONE - CREDIPHONE*
 *Estado:* ${analisis.estado}
@@ -158,6 +162,7 @@ Analiza este solicitante de financiamiento de iPhone:
 📱 *iPhone solicitado:*
 • Modelo: ${modelo} ${capacidad}
 • Cuotas: ${cuotas}
+• Entrega: ${entregaEmoji}
 ━━━━━━━━━━━━━━━━━
 👤 *Datos del cliente:*
 • Nombre: ${nombre}
