@@ -313,9 +313,14 @@
         <div class="section-tag">Ingreso mensual</div>
         <div class="question">¿Cuáles son tus ingresos mensuales?</div>
         <div class="list-grid" id="ingresoGrid">
-          <button class="list-btn" onclick="selIngreso(this,'Menos de Gs. 2.500.000')">💵 Menos de Gs. 2.500.000</button>
-          <button class="list-btn" onclick="selIngreso(this,'Entre Gs. 2.500.000 y Gs. 2.999.999')">💵 Entre Gs. 2.500.000 y Gs. 2.999.999</button>
+          <button class="list-btn" onclick="selIngreso(this,'Menos de Gs. 2.800.000')">💵 Menos de Gs. 2.800.000</button>
+          <button class="list-btn" onclick="selIngreso(this,'Salario mínimo vigente')">💵 Salario mínimo vigente</button>
           <button class="list-btn" onclick="selIngreso(this,'Gs. 3.000.000 o más')">💵 Gs. 3.000.000 o más</button>
+        </div>
+        <div class="field" style="margin-top:12px; margin-bottom:0;">
+          <input type="text" id="ingresoExacto" placeholder="O ingresá tu monto exacto: Ej: Gs. 2.450.000"
+            oninput="selIngresoExacto(this.value)"
+            style="width:100%; padding:14px 16px; border:2px solid #e8e8e8; border-radius:12px; font-family:'Nunito',sans-serif; font-size:14px; font-weight:600; color:#111; background:#f7f7f7; outline:none;" />
         </div>
       </div>
 
@@ -613,7 +618,16 @@ function selIngreso(el, val) {
   S.ingreso = val;
   document.querySelectorAll('#ingresoGrid .list-btn').forEach(b => b.classList.remove('sel'));
   el.classList.add('sel');
+  document.getElementById('ingresoExacto').value = '';
   show('secSiguiente'); scrollSmooth('secSiguiente');
+}
+
+function selIngresoExacto(val) {
+  if (val.trim()) {
+    S.ingreso = val.trim();
+    document.querySelectorAll('#ingresoGrid .list-btn').forEach(b => b.classList.remove('sel'));
+    show('secSiguiente');
+  }
 }
 
 function selEntrega(el, val) {
