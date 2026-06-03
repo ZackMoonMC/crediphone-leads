@@ -362,6 +362,13 @@
         <input type="tel" id="telefono" placeholder="Ej: 0981 000 000" autocomplete="tel" />
       </div>
 
+      <div style="display:flex; align-items:flex-start; gap:12px; margin-top:16px; margin-bottom:8px; padding:14px; background:#f7f7f7; border-radius:14px; border:2px solid #e8e8e8;">
+        <input type="checkbox" id="consentimiento" style="width:20px; height:20px; margin-top:2px; accent-color:#CC0000; flex-shrink:0; cursor:pointer;" />
+        <label for="consentimiento" style="font-family:'Nunito',sans-serif; font-size:13px; font-weight:600; color:#555; line-height:1.5; cursor:pointer;">
+          Acepto que Crediphone verifique mis datos personales para la evaluación de crédito.
+        </label>
+      </div>
+
       <button class="btn-primary" onclick="enviar()">Quiero mi iPhone 🔥</button>
       <button class="btn-back" onclick="goStep(2)">← Volver</button>
     </div>
@@ -668,6 +675,7 @@ async function enviar() {
   if (!S.nombre)   return alert('Ingresá tu nombre');
   if (!S.cedula)   return alert('Ingresá tu cédula');
   if (!S.telefono) return alert('Ingresá tu WhatsApp');
+  if (!document.getElementById('consentimiento').checked) return alert('Necesitamos tu consentimiento para continuar ✅');
 
   document.getElementById('overlay').classList.add('show');
 
